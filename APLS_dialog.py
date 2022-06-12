@@ -27,9 +27,9 @@ import os
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
 from qgis.core import *
-import os,math
+import os,math,time
 import processing
-
+import tempfile
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'APLS_dialog_base.ui'))
@@ -52,6 +52,14 @@ class APLSDialog(QtWidgets.QDialog, FORM_CLASS):
         i2=self.lineEdit_2.text()
         tol1 = float(self.lineEdit_3.text())
         tol2 = float(self.lineEdit_4.text())
+        processing_folder = tempfile.gettempdir()+'/APLS_Plugin/'
+        os.system('mkdir '+processing_folder)
+        time.sleep(0.2)
+
+        os.system('mkdir '+processing_folder+'short_test/')
+        time.sleep(0.2)
+        os.system('mkdir '+processing_folder+'short_pred/')
+        
         #print(i1,i2)
         folder=i1#'/home/mohammed/Desktop/Project/test_shp-20220525T193811Z-001/test_shp/'
         folder2 = i2#'/home/mohammed/Desktop/Project/model_output0_1_extended_20_done_shp_test_opt1-20220609T113013Z-001/model_output0_1_extended_20_done_shp_test_opt1/'
@@ -65,7 +73,7 @@ class APLSDialog(QtWidgets.QDialog, FORM_CLASS):
             path2 = folder2+file
             nn+=1
             path =folder+file 
-            APLS =self.apls(path,path2,file,tol=tol1,sn_tol=tol2)
+            APLS =self.apls(path,path2,processing_folder,file,tol=tol1,sn_tol=tol2)
             print('Apls for Folder :',sdir,' is ',APLS)
             ss+=APLS
             self.progressBar.setValue(int(nn/len(dirs) *100))
@@ -73,7 +81,7 @@ class APLSDialog(QtWidgets.QDialog, FORM_CLASS):
         
 
 
-    def apls(self,path,path2,file,tol=20,sn_tol=8.0):
+    def apls(self,path,path2,processing_folder,file,tol=20,sn_tol=8.0):
         processing.run("native:polygonfromlayerextent", {'INPUT':path,'ROUND_TO':0,'OUTPUT':path.split('.')[0]+'_extnt.shp'})
         #processing.run("native:extractvertices", {'INPUT':path,'OUTPUT':path.split('.')[0]+'_vertix.shp'})
         processing.run("native:extractspecificvertices", {'INPUT':path,'VERTICES':'0,-1','OUTPUT':path.split('.')[0]+'_vertix.shp'})
@@ -110,11 +118,11 @@ class APLSDialog(QtWidgets.QDialog, FORM_CLASS):
                 minn=d
                 coords2=[v.x(),v.y()]        
         ##Nearest paths
-        processing.run("native:shortestpathlayertopoint", {'INPUT':path,'STRATEGY':0,'DIRECTION_FIELD':'','VALUE_FORWARD':'','VALUE_BACKWARD':'','VALUE_BOTH':'','DEFAULT_DIRECTION':2,'SPEED_FIELD':'','DEFAULT_SPEED':50,'TOLERANCE':tol,'START_POINTS':path.split('.')[0]+'_vertix.shp','END_POINT':str(coords[0])+','+str(coords[1])+' [EPSG:26986]','OUTPUT':'/home/mohammed/Desktop/Project/APLS/short_test/'+file.split('/')[1]})
-        processing.run("native:shortestpathlayertopoint", {'INPUT':path2,'STRATEGY':0,'DIRECTION_FIELD':'','VALUE_FORWARD':'','VALUE_BACKWARD':'','VALUE_BOTH':'','DEFAULT_DIRECTION':2,'SPEED_FIELD':'','DEFAULT_SPEED':50,'TOLERANCE':tol,'START_POINTS':path2.split('.')[0]+'_vertix.shp','END_POINT':str(coords2[0])+','+str(coords2[1])+' [EPSG:26986]','OUTPUT':'/home/mohammed/Desktop/Project/APLS/short_pred/'+file.split('/')[1]})
-        short_test =QgsVectorLayer('/home/mohammed/Desktop/Project/APLS/short_test/'+file.split('/')[1],"briefkasten","ogr")
+        processing.run("native:shortestpathlayertopoint", {'INPUT':path,'STRATEGY':0,'DIRECTION_FIELD':'','VALUE_FORWARD':'','VALUE_BACKWARD':'','VALUE_BOTH':'','DEFAULT_DIRECTION':2,'SPEED_FIELD':'','DEFAULT_SPEED':50,'TOLERANCE':tol,'START_POINTS':path.split('.')[0]+'_vertix.shp','END_POINT':str(coords[0])+','+str(coords[1])+' [EPSG:26986]','OUTPUT':processing_folder+'short_test/'+file.split('/')[1]})
+        processing.run("native:shortestpathlayertopoint", {'INPUT':path2,'STRATEGY':0,'DIRECTION_FIELD':'','VALUE_FORWARD':'','VALUE_BACKWARD':'','VALUE_BOTH':'','DEFAULT_DIRECTION':2,'SPEED_FIELD':'','DEFAULT_SPEED':50,'TOLERANCE':tol,'START_POINTS':path2.split('.')[0]+'_vertix.shp','END_POINT':str(coords2[0])+','+str(coords2[1])+' [EPSG:26986]','OUTPUT':processing_folder+'short_pred/'+file.split('/')[1]})
+        short_test =QgsVectorLayer(processing_folder+'short_test/'+file.split('/')[1],"briefkasten","ogr")
         features_test=short_test.getFeatures()
-        short_pred =QgsVectorLayer('/home/mohammed/Desktop/Project/APLS/short_pred/'+file.split('/')[1],"briefkasten","ogr")
+        short_pred =QgsVectorLayer(processing_folder+'short_pred/'+file.split('/')[1],"briefkasten","ogr")
         features_pred=short_pred.getFeatures()
         N=0
         s =0

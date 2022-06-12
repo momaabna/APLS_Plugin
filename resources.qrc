@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/APLS" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>

@@ -69,3 +69,6 @@ Example of Folder Structure for the files
 │       │   ├── 10828720_15.shx
 
 ```
+Screenshot
+
+![alt text](https://github.com/[username]/[reponame]/blob/[branch]/images/apls.jpg?raw=true)

@@ -71,4 +71,4 @@ Example of Folder Structure for the files
 ```
 Screenshot
 
-![alt text](./images/apls.jpg?raw=true)
+![alt text](https://github.com/momaabna/APLS_Plugin/raw/main/images/apls.png)

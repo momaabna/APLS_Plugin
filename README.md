@@ -71,4 +71,4 @@ Example of Folder Structure for the files
 ```
 Screenshot
 
-![alt text](https://github.com/[username]/[reponame]/blob/[branch]/images/apls.jpg?raw=true)
+![alt text](./images/apls.jpg?raw=true)

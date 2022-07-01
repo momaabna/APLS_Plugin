@@ -72,3 +72,26 @@ Example of Folder Structure for the files
 Screenshot
 
 ![alt text](https://github.com/momaabna/APLS_Plugin/raw/main/images/apls.png)
+
+
+## Resources 
+```
+@inproceedings{van2020road,
+  title={Road network and travel time extraction from multiple look angles with spacenet data},
+  author={Van Etten, Adam and Shermeyer, Jacob and Hogan, Daniel and Weir, Nicholas and Lewis, Ryan},
+  booktitle={IGARSS 2020-2020 IEEE International Geoscience and Remote Sensing Symposium},
+  pages={3920--3923},
+  year={2020},
+  organization={IEEE}
+}
+
+```
+## Citation
+```
+@masterthesis{MohammedThesisRoad,
+    author = {Mohammed Nasser},
+    title = {Road Identification from Satellite Imagery Using Deep Learning},
+    school = {Erciyes University},
+    year = {2022}
+}
+```

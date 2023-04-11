@@ -46,6 +46,18 @@ class APLSDialog(QtWidgets.QDialog, FORM_CLASS):
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
         self.pushButtonstart.clicked.connect(self.start_apls)
+        self.openFolder1.clicked.connect(self.openFolder1_fn)
+        self.openFolder2.clicked.connect(self.openFolder2_fn)
+
+    def openFolder1_fn(self):
+        folder = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder')
+        self.lineEdit.setText(folder)
+
+    def openFolder2_fn(self):
+        folder = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder')
+        self.lineEdit_2.setText(folder)
+
+    
     def start_apls(self):
         #implement on folder
         i1=self.lineEdit.text()
@@ -61,23 +73,34 @@ class APLSDialog(QtWidgets.QDialog, FORM_CLASS):
         os.system('mkdir '+processing_folder+'short_pred/')
         
         #print(i1,i2)
-        folder=i1#'/home/mohammed/Desktop/Project/test_shp-20220525T193811Z-001/test_shp/'
-        folder2 = i2#'/home/mohammed/Desktop/Project/model_output0_1_extended_20_done_shp_test_opt1-20220609T113013Z-001/model_output0_1_extended_20_done_shp_test_opt1/'
+        folder= i1+'/' if i1[-1]!='/' else i1
+        folder2 =  i2+'/' if i2[-1]!='/' else i2
         dirs = os.listdir(folder2)
-        ss=0
+        ss=[]
         nn=0
-        print('Processing total of :',len(dirs),'images.') 
+        print('Processing total of :',len(dirs),'images.')
+        self.progressBar.setValue(0)
+        self.listWidget.clear()
         for sdir in dirs:
             file =sdir+'/'+sdir+'.shp'
 
             path2 = folder2+file
             nn+=1
             path =folder+file 
+
             APLS =self.apls(path,path2,processing_folder,file,tol=tol1,sn_tol=tol2)
+            #run as a thread
+
             print('Apls for Folder :',sdir,' is ',APLS)
-            ss+=APLS
+            self.listWidget.addItem('Apls for Folder :'+sdir+' is '+str(APLS))
+            #update widget
+            
+            ss.append(APLS)
             self.progressBar.setValue(int(nn/len(dirs) *100))
-        print('AVG APLS is',ss/nn)
+        print('AVG APLS is',sum(ss)/len(ss))
+        self.average.setText('AVG APLS : '+str(sum(ss)/len(ss)))
+        self.minimum.setText('MIN APLS : '+str(min(ss)))
+        self.maximum.setText('MAX APLS : '+str(max(ss)))
         
 
 

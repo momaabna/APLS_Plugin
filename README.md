@@ -1,7 +1,8 @@
 # Average Path Length Similarity (APLS) Plugin for QGIS Software
 
 
-QGIS Plugin for Extracted roads evaluation using APLS matrix 
+
+The APLS Plugin for QGIS Software is a tool that can be used to evaluate extracted road networks from satellite imagery. This plugin uses the Average Path Length Similarity (APLS) matrix to compare the extracted road network to a ground truth network. APLS is a measure of the similarity between two networks, based on the average shortest path length between pairs of nodes. 
 
 ## Requrements 
 - QGIS 3.0 or higher
@@ -37,7 +38,10 @@ AVG APLS is 0.4584244128431006
 - Djkstra Algorithm Tolerance
 - Snapping Tolerance
 
-Example of Folder Structure for the files 
+
+
+ The plugin requires QGIS 3.0 or higher to be installed and allows users to input a ground truth folder containing sub-folders, each of which contains a shapefile, and a predicted network folder containing sub-folders, each of which also contains a shapefile. The plugin then calculates the APLS for each sub-folder in the predicted network folder and outputs the results in the Python console.
+ Example of Folder Structure for the files 
 ```sh
 /main_folder
 │   └── test_shp/

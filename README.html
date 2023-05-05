@@ -1,42 +1,117 @@
+<!DOCTYPE html>
 <html>
+<head>
+	<title>APLS Plugin for QGIS Software</title>
+</head>
 <body>
-<h3>Plugin Builder Results</h3>
 
-Congratulations! You just built a plugin for QGIS!<br/><br />
+<h1>APLS Plugin for QGIS Software</h1>
 
-<div id='help' style='font-size:.9em;'>
-Your plugin <b>APLS</b> was created in:<br>
-&nbsp;&nbsp;<b>/home/mohammed/apls/apls</b>
-<p>
-Your QGIS plugin directory is located at:<br>
-&nbsp;&nbsp;<b>/home/mohammed/.local/share/QGIS/QGIS3/profiles/default/python/plugins</b>
-<p>
-<h3>What's Next</h3>
-<ol>
-    <li>If resources.py is not present in your plugin directory, compile the resources file using pyrcc5 (simply use <b>pb_tool</b> or <b>make</b> if you have automake)
-    <li>Optionally, test the generated sources using <b>make test</b> (or run tests from your IDE)
-    <li>Copy the entire directory containing your new plugin to the QGIS plugin directory (see Notes below)
-    <li>Test the plugin by enabling it in the QGIS plugin manager
-    <li>Customize it by editing the implementation file <b>APLS.py</b>
-    <li>Create your own custom icon, replacing the default <b>icon.png</b>
-    <li>Modify your user interface by opening <b>APLS_dialog_base.ui</b> in Qt Designer
-</ol>
-Notes:
+<p>QGIS Plugin for Extracted roads evaluation using APLS matrix.</p>
+
+<p>The APLS Plugin for QGIS Software is a tool that can be used to evaluate extracted road networks from satellite imagery. This plugin uses the Average Path Length Similarity (APLS) matrix to compare the extracted road network to a ground truth network. APLS is a measure of the similarity between two networks, based on the average shortest path length between pairs of nodes. </p>
+
+
+<h2>Requirements</h2>
+
 <ul>
-    <li>You can use <b>pb_tool</b> to compile, deploy, and manage your plugin. Tweak the <i>pb_tool.cfg</i> file included with your plugin as you add files. Install <b>pb_tool</b> using 
-        <i>pip</i> or <i>easy_install</i>. See <b>http://loc8.cc/pb_tool</b> for more information.
-    <li>You can also use the <b>Makefile</b> to compile and deploy when you
-        make changes. This requires GNU make (gmake). The Makefile is ready to use, however you 
-        will have to edit it to add addional Python source files, dialogs, and translations.
+	<li>QGIS 3.0 or higher</li>
 </ul>
-</div>
-<div style='font-size:.9em;'>
-<p>
-For information on writing PyQGIS code, see <b>http://loc8.cc/pyqgis_resources</b> for a list of resources.
-</p>
-</div>
-<p>
-&copy;2011-2019 GeoApt LLC - geoapt.com 
-</p>
+
+<h2>Usage</h2>
+
+<ol>
+	<li>Before openning the plugin make sure Python console is opened</li>
+	<li>Run the plugin and specify inputs correctly</li>
+		<ul>
+			<li>ex:Ground truth: /main_folder/Predicted_shp/</li>
+			<li>Predicted : /main_folder/test_shp/</li>
+			<li>Djkstra Tolerance : 0.0</li>
+			<li>Snapping Tolerance : 8.0</li>
+		</ul>
+	<li>Run and wait untill processing is finished</li>
+	<li>The results are displayed in Python console</li>
+</ol>
+
+<p>Results example :</p>
+
+<pre>
+Processing total of : 49 images.
+Apls for Folder : 18178780_15  is  0.9886363636363636
+Apls for Folder : 11278840_15  is  0.11675731021559
+Apls for Folder : 23278915_15  is  0.3240173376386126
+Apls for Folder : 18478900_15  is  0.9666666666666667
+................
+Apls for Folder : 24628885_15  is  0.07408254856578367
+Apls for Folder : 22228900_15  is  0.4204545454545454
+Apls for Folder : 24479215_15  is  0.1971564400253033
+AVG APLS is 0.4584244128431006
+</pre>
+
+<h2>Inputs</h2>
+
+<ul>
+	<li>Ground truth folder contains sub-folders each sub-folder contain shapefile</li>
+	<li>Predicted network folder which contains sub-folders each sub-folder contain shapefile</li>
+	<li>Djkstra Algorithm Tolerance</li>
+	<li>Snapping Tolerance</li>
+</ul>
+
+<p>Example of Folder Structure for the files</p>
+ The plugin requires QGIS 3.0 or higher to be installed and allows users to input a ground truth folder containing sub-folders, each of which contains a shapefile, and a predicted network folder containing sub-folders, each of which also contains a shapefile. The plugin then calculates the APLS for each sub-folder in the predicted network folder and outputs the results in the Python console.
+<pre>
+/main_folder
+│   └── test_shp/
+│       ├── 10378780_15
+│       │   ├── 10378780_15.cpg
+│       │   ├── 10378780_15.dbf
+│       │   ├── 10378780_15.prj
+│       │   ├── 10378780_15.shp
+│       │   ├── 10378780_15.shx
+│       ├── 10828720_15
+│       │   ├── 10828720_15.cpg
+│       │   ├── 10828720_15.dbf
+│       │   ├── 10828720_15.prj
+│       │   ├── 10828720_15.shp
+│       │   ├── 10828720_15.shx
+-----------------------------------
+│   └── Predicted_shp/
+│       ├── 10378780_15
+│       │   ├── 10378780_15.cpg
+│       │   ├── 10378780_15.dbf
+│       │   ├── 10378780_15.prj
+│       │   ├── 10378780_15.shp
+│       │   ├── 10378780_15.shx
+│       ├── 10828720_15
+│       │   ├── 10828720_15.cpg
+│       │   ├── 10828720_15.dbf
+│       │   ├── 10828720_15.prj
+│       │   ├── 10828720_15.shp
+│       │   ├── 10828720_15.shx
+
+<h2>References</h2>
+
+<code>
+@inproceedings{van2020road,
+  title={Road network and travel time extraction from multiple look angles with spacenet data},
+  author={Van Etten, Adam and Shermeyer, Jacob and Hogan, Daniel and Weir, Nicholas and Lewis, Ryan},
+  booktitle={IGARSS 2020-2020 IEEE International Geoscience and Remote Sensing Symposium},
+  pages={3920--3923},
+  year={2020},
+  organization={IEEE}
+}
+</code>
+
+<h2>Citation</h2>
+<code>
+@masterthesis{MohammedThesisRoad,
+    author = {Mohammed Nasser},
+    title = {Road Identification from Satellite Imagery Using Deep Learning},
+    school = {Erciyes University},
+    year = {2022}
+}
+</code>
+
+
 </body>
 </html>
